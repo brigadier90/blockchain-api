@@ -11,6 +11,7 @@ public class BlockCypherController : ControllerBase
     private const string ETH = "eth";
     private const string LTC = "ltc";
     private const string DASH = "dash";
+    
     private static readonly List<string> Coins = new() { BTC, ETH, LTC, DASH };
     private static readonly Dictionary<string, List<BlockCypher>> History = new();
 
@@ -67,9 +68,9 @@ public class BlockCypherController : ControllerBase
             if (!History.ContainsKey(coin))
                 return NotFound($"No history found for coin: {coin}");
 
-            return Ok(History[coin]);
+            return Ok(History[coin].OrderByDescending(h => h.CreatedAt).ToList());
         }
-        catch (System.Exception)
+        catch (Exception)
         {
             return StatusCode(500, $"Error retrieving history for coin: {coin}");
         }
