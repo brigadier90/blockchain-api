@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BlockchainApi.Api.Controllers;
 
+/// <summary>
+/// Controller for interacting with BlockCypher blockchain endpoints.
+/// Provides endpoints to fetch current blockchain data and retrieve historical requests.
+/// </summary>
 [ApiController]
 [Route("api/blockcypher/v1")]
 public class BlockCypherController : ControllerBase
