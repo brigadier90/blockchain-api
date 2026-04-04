@@ -37,7 +37,10 @@ app.MapGet("/api/blockcypher/v1/{coin}/main", (string coin) =>
 
 app.MapGet("/api/blockcypher/v1/{coin}/history", (string coin) =>
 {
-    return string.Empty;
+    if (!history.ContainsKey(coin))
+        return Results.NotFound($"No history found for coin: {coin}");
+
+    return Results.Ok(history[coin]);
 })
 .WithName("GetCoinBlockCypherHistory")
 .WithDescription("Returns the history of block information requested for the specified coin.");
