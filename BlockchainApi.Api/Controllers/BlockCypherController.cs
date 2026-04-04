@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using BlockchainApi.Api.Models;
 
 namespace BlockchainApi.Api.Controllers;
 
@@ -8,7 +9,7 @@ public class BlockCypherController : ControllerBase
 {
     private static readonly List<string> Coins = new() { "btc", "eth", "ltc", "dash" };
 
-    private static readonly Dictionary<string, List<string>> History = new();
+    private static readonly Dictionary<string, List<BlockCypher>> History = new();
 
     /// <summary>
     /// Returns the latest block information from BlockCypher API for the specified coin.
@@ -24,9 +25,15 @@ public class BlockCypherController : ControllerBase
         var result = response.Content.ReadAsStringAsync().Result;
 
         if (!History.ContainsKey(coin))
-            History[coin] = new List<string>();
+            History[coin] = new List<BlockCypher>();
 
-        History[coin].Add(result);
+        var record = new BlockCypher
+        {
+            CreatedAt = DateTime.UtcNow,
+            RawData = result
+        };
+
+        History[coin].Add(record);
 
         return Content(result, "application/json");
     }
