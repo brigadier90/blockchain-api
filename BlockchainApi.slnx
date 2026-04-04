@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BlockchainApi.Api/BlockchainApi.Api.csproj" />
+  <Project Path="BlockchainApi.Tests/BlockchainApi.Tests.csproj" />
+</Solution>
