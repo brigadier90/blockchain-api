@@ -7,8 +7,11 @@ namespace BlockchainApi.Api.Controllers;
 [Route("api/blockcypher/v1")]
 public class BlockCypherController : ControllerBase
 {
-    private static readonly List<string> Coins = new() { "btc", "eth", "ltc", "dash" };
-
+    private const string BTC = "btc";
+    private const string ETH = "eth";
+    private const string LTC = "ltc";
+    private const string DASH = "dash";
+    private static readonly List<string> Coins = new() { BTC, ETH, LTC, DASH };
     private static readonly Dictionary<string, List<BlockCypher>> History = new();
 
     /// <summary>
@@ -19,23 +22,33 @@ public class BlockCypherController : ControllerBase
     [HttpGet("{coin}/main")]
     public IActionResult GetCoin(string coin)
     {
-        using var http = new HttpClient();
+        if (!Coins.Contains(coin))
+            return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
 
-        var response = http.GetAsync($"https://api.blockcypher.com/v1/{coin}/main").Result;
-        var result = response.Content.ReadAsStringAsync().Result;
-
-        if (!History.ContainsKey(coin))
-            History[coin] = new List<BlockCypher>();
-
-        var record = new BlockCypher
+        try
         {
-            CreatedAt = DateTime.UtcNow,
-            RawData = result
-        };
+            using var http = new HttpClient();
 
-        History[coin].Add(record);
+            var response = http.GetAsync($"https://api.blockcypher.com/v1/{coin}/main").Result;
+            var result = response.Content.ReadAsStringAsync().Result;
 
-        return Content(result, "application/json");
+            if (!History.ContainsKey(coin))
+                History[coin] = new List<BlockCypher>();
+
+            var record = new BlockCypher
+            {
+                CreatedAt = DateTime.UtcNow,
+                RawData = result
+            };
+
+            History[coin].Add(record);
+
+            return Content(result, "application/json");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error fetching data from BlockCypher API: {ex.Message}");
+        }
     }
 
     /// <summary>
@@ -46,9 +59,19 @@ public class BlockCypherController : ControllerBase
     [HttpGet("{coin}/history")]
     public IActionResult GetHistory(string coin)
     {
-        if (!History.ContainsKey(coin))
-            return NotFound($"No history found for coin: {coin}");
+        try
+        {
+            if (!Coins.Contains(coin))
+                return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
 
-        return Ok(History[coin]);
+            if (!History.ContainsKey(coin))
+                return NotFound($"No history found for coin: {coin}");
+
+            return Ok(History[coin]);
+        }
+        catch (System.Exception)
+        {
+            return StatusCode(500, $"Error retrieving history for coin: {coin}");
+        }
     }
 }
