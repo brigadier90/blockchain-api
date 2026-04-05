@@ -48,7 +48,7 @@ public class BlockCypherController : ControllerBase
 
             History[coin].Add(record);
 
-            return Content(result, "application/json");
+            return Ok(record);
         }
         catch (Exception ex)
         {
