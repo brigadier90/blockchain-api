@@ -29,7 +29,7 @@ public class BlockCypherController : ControllerBase
     [HttpGet("{coin}/main")]
     public IActionResult GetCoin(string coin)
     {
-        if (!Coins.Contains(coin))
+        if (IsValid(coin))
             return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
 
         try
@@ -42,7 +42,7 @@ public class BlockCypherController : ControllerBase
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, $"Error fetching data from BlockCypher API: {result}");
 
-            var record =  BlockCypher.FromJson(coin, result);
+            var record = BlockCypher.FromJson(coin, result);
 
             _repository.Save(record);
             return Ok(BlockcypherSnapshotDto.FromRecord(record));
@@ -63,7 +63,7 @@ public class BlockCypherController : ControllerBase
     {
         try
         {
-            if (!Coins.Contains(coin))
+            if (IsValid(coin))
                 return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
 
             if (!_repository.TryGetHistory(coin, out var history) || history.Count == 0)
@@ -78,4 +78,6 @@ public class BlockCypherController : ControllerBase
             return StatusCode(500, $"Error retrieving history for coin: {coin}");
         }
     }
+
+    private static bool IsValid(string coin) => !Coins.Contains(coin);
 }
