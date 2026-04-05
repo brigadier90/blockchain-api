@@ -8,11 +8,11 @@ namespace BlockchainApi.Api.Controllers;
 [Route("api/blockcypher/v1")]
 public class BlockCypherController : ControllerBase
 {
-    private const string BTC = "btc";
-    private const string ETH = "eth";
-    private const string LTC = "ltc";
-    private const string DASH = "dash";
-    
+    private const string BTC = "BTC";
+    private const string ETH = "ETH";
+    private const string LTC = "LTC";
+    private const string DASH = "DASH";
+
     private static readonly List<string> Coins = new() { BTC, ETH, LTC, DASH };
     private IBlockCypherRepository _repository;
 
@@ -42,12 +42,7 @@ public class BlockCypherController : ControllerBase
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, $"Error fetching data from BlockCypher API: {result}");
 
-            var record = new BlockCypher
-            {
-                CreatedAt = DateTime.UtcNow,
-                Coin = coin,
-                RawData = result
-            };
+            var record =  BlockCypher.FromJson(coin, result);
 
             _repository.Save(record);
             return Ok(BlockcypherSnapshotDto.FromRecord(record));
