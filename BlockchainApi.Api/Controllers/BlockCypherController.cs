@@ -33,6 +33,9 @@ public class BlockCypherController : ControllerBase
             var response = http.GetAsync($"https://api.blockcypher.com/v1/{coin}/main").Result;
             var result = response.Content.ReadAsStringAsync().Result;
 
+            if (!response.IsSuccessStatusCode)
+                return StatusCode((int)response.StatusCode, $"Error fetching data from BlockCypher API: {result}");
+
             if (!History.ContainsKey(coin))
                 History[coin] = new List<BlockCypher>();
 
