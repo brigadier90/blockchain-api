@@ -42,6 +42,7 @@ public class BlockCypherController : ControllerBase
             var record = new BlockCypher
             {
                 CreatedAt = DateTime.UtcNow,
+                Coin = coin,
                 RawData = result
             };
 
