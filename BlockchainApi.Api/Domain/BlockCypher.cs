@@ -1,4 +1,4 @@
-namespace BlockchainApi.Api.Models;
+namespace BlockchainApi.Api.Domain.Models;
 
 public record BlockCypher
 {

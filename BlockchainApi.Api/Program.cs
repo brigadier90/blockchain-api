@@ -1,3 +1,6 @@
+using BlockchainApi.Api.Domain;
+using BlockchainApi.Api.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
@@ -8,6 +11,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddControllers();
+builder.Services.AddSingleton<IBlockCypherRepository, BlockCypherRepository>();
 
 var app = builder.Build();
 

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using BlockchainApi.Api.Models;
+using BlockchainApi.Api.Domain.Models;
+using BlockchainApi.Api.Domain;
 
 namespace BlockchainApi.Api.Controllers;
 
@@ -13,7 +14,12 @@ public class BlockCypherController : ControllerBase
     private const string DASH = "dash";
     
     private static readonly List<string> Coins = new() { BTC, ETH, LTC, DASH };
-    private static readonly Dictionary<string, List<BlockCypher>> History = new();
+    private IBlockCypherRepository _repository;
+
+    public BlockCypherController(IBlockCypherRepository repository)
+    {
+        _repository = repository;
+    }
 
     /// <summary>
     /// Returns the latest block information from BlockCypher API for the specified coin.
@@ -36,9 +42,6 @@ public class BlockCypherController : ControllerBase
             if (!response.IsSuccessStatusCode)
                 return StatusCode((int)response.StatusCode, $"Error fetching data from BlockCypher API: {result}");
 
-            if (!History.ContainsKey(coin))
-                History[coin] = new List<BlockCypher>();
-
             var record = new BlockCypher
             {
                 CreatedAt = DateTime.UtcNow,
@@ -46,8 +49,7 @@ public class BlockCypherController : ControllerBase
                 RawData = result
             };
 
-            History[coin].Add(record);
-
+            _repository.Save(record);
             return Ok(BlockcypherSnapshotDto.FromRecord(record));
         }
         catch (Exception ex)
@@ -69,10 +71,10 @@ public class BlockCypherController : ControllerBase
             if (!Coins.Contains(coin))
                 return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
 
-            if (!History.ContainsKey(coin))
+            if (!_repository.TryGetHistory(coin, out var history) || history.Count == 0)
                 return NotFound($"No history found for coin: {coin}");
 
-            var snapshotDtos = History[coin].Select(BlockcypherSnapshotDto.FromRecord).ToList();
+            var snapshotDtos = history.Select(BlockcypherSnapshotDto.FromRecord).ToList();
 
             return Ok(snapshotDtos);
         }

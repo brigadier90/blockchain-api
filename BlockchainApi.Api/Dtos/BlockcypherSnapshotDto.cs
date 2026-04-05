@@ -1,5 +1,5 @@
 using System.Text.Json;
-using BlockchainApi.Api.Models;
+using BlockchainApi.Api.Domain.Models;
 
 public class BlockcypherSnapshotDto
 {
