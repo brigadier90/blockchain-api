@@ -8,10 +8,10 @@ namespace BlockchainApi.Api.Controllers;
 [Route("api/blockcypher/v1")]
 public class BlockCypherController : ControllerBase
 {
-    private const string BTC = "BTC";
-    private const string ETH = "ETH";
-    private const string LTC = "LTC";
-    private const string DASH = "DASH";
+    private const string BTC = "btc";
+    private const string ETH = "eth";
+    private const string LTC = "ltc";
+    private const string DASH = "dash";
 
     private static readonly List<string> Coins = new() { BTC, ETH, LTC, DASH };
     private IBlockCypherRepository _repository;
