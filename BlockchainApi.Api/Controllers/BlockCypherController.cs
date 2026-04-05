@@ -48,7 +48,7 @@ public class BlockCypherController : ControllerBase
 
             History[coin].Add(record);
 
-            return Ok(record);
+            return Ok(BlockcypherSnapshotDto.FromRecord(record));
         }
         catch (Exception ex)
         {
@@ -72,7 +72,9 @@ public class BlockCypherController : ControllerBase
             if (!History.ContainsKey(coin))
                 return NotFound($"No history found for coin: {coin}");
 
-            return Ok(History[coin].OrderByDescending(h => h.CreatedAt).ToList());
+            var snapshotDtos = History[coin].Select(BlockcypherSnapshotDto.FromRecord).ToList();
+
+            return Ok(snapshotDtos);
         }
         catch (Exception)
         {
