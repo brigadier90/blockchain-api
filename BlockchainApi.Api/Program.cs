@@ -1,5 +1,6 @@
 using System.Reflection;
 using BlockchainApi.Api.Application.Clients;
+using BlockchainApi.Api.Domain;
 using BlockchainApi.Api.Domain.Repositories;
 using BlockchainApi.Api.Infrastructure.Clients;
 using BlockchainApi.Api.Infrastructure.Repositories;
@@ -16,6 +17,14 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
 builder.Services.AddSingleton<IBlockCypherRepository, BlockCypherRepository>();
 builder.Services.AddHttpClient<IBlockCypherClient, BlockCypherClient>()
     .ConfigureHttpClient(client =>
@@ -33,6 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAll");
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();
