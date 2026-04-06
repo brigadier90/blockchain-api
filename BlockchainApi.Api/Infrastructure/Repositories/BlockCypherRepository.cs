@@ -1,7 +1,7 @@
-using BlockchainApi.Api.Domain;
 using BlockchainApi.Api.Domain.Models;
+using BlockchainApi.Api.Domain.Repositories;
 
-namespace BlockchainApi.Api.Repositories;
+namespace BlockchainApi.Api.Infrastructure.Repositories;
 
 public class BlockCypherRepository : IBlockCypherRepository
 {
@@ -15,7 +15,7 @@ public class BlockCypherRepository : IBlockCypherRepository
         _storage[record.Coin].Add(record);
     }
 
-    public bool TryGetHistory(string coin, out List<BlockCypher> history)
+    public bool TryGetAllFor(string coin, out List<BlockCypher> history)
     {
         if (_storage.TryGetValue(coin, out var stored))
         {

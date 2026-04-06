@@ -1,9 +1,9 @@
 using BlockchainApi.Api.Domain.Models;
 
-namespace BlockchainApi.Api.Domain;
+namespace BlockchainApi.Api.Domain.Repositories;
 
 public interface IBlockCypherRepository
 {
     public void Save(BlockCypher record);
-    public bool TryGetHistory(string coin, out List<BlockCypher> history);
+    public bool TryGetAllFor(string coin, out List<BlockCypher> history);
 }
