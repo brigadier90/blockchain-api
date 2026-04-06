@@ -1,6 +1,6 @@
 using BlockchainApi.Api.Domain.Models;
 
-namespace BlockchainApi.Api.Domain;
+namespace BlockchainApi.Api.Domain.Repositories;
 
 public interface IBlockCypherRepository
 {

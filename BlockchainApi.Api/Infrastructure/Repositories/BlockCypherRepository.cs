@@ -1,7 +1,7 @@
-using BlockchainApi.Api.Domain;
 using BlockchainApi.Api.Domain.Models;
+using BlockchainApi.Api.Domain.Repositories;
 
-namespace BlockchainApi.Api.Repositories;
+namespace BlockchainApi.Api.Infrastructure.Repositories;
 
 public class BlockCypherRepository : IBlockCypherRepository
 {

@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using BlockchainApi.Api.Domain;
 using MediatR;
 using BlockchainApi.Api.Application.Commands;
 using BlockchainApi.Api.Application.Queries;
@@ -12,7 +11,7 @@ public class BlockCypherController : ControllerBase
 {
     private IMediator _mediator;
 
-    public BlockCypherController(IMediator mediator, IBlockCypherRepository repository)
+    public BlockCypherController(IMediator mediator)
     {
         _mediator = mediator;
     }

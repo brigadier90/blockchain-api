@@ -1,5 +1,5 @@
 using BlockchainApi.Api.Application.Common;
-using BlockchainApi.Api.Domain;
+using BlockchainApi.Api.Domain.Repositories;
 using MediatR;
 
 namespace BlockchainApi.Api.Application.Queries;
