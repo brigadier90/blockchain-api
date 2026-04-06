@@ -3,6 +3,7 @@ using BlockchainApi.Api.Application.Common;
 using BlockchainApi.Api.Domain.Repositories;
 using BlockchainApi.Api.Domain.Models;
 using MediatR;
+using BlockchainApi.Api.Dtos;
 
 namespace BlockchainApi.Api.Application.Commands;
 

@@ -1,6 +1,8 @@
 using System.Text.Json;
 using BlockchainApi.Api.Domain.Models;
 
+namespace BlockchainApi.Api.Dtos;
+
 public class BlockcypherSnapshotDto
 {
     public string Chain { get; set; } = null!;
