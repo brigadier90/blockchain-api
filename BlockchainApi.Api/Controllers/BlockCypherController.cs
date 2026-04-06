@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using BlockchainApi.Api.Domain.Models;
 using BlockchainApi.Api.Domain;
+using MediatR;
+using BlockchainApi.Api.Application.Commands;
 
 namespace BlockchainApi.Api.Controllers;
 
@@ -14,10 +16,12 @@ public class BlockCypherController : ControllerBase
     private const string DASH = "dash";
 
     private static readonly List<string> Coins = new() { BTC, ETH, LTC, DASH };
+    private IMediator _mediator;
     private IBlockCypherRepository _repository;
 
-    public BlockCypherController(IBlockCypherRepository repository)
+    public BlockCypherController(IMediator mediator, IBlockCypherRepository repository)
     {
+        _mediator = mediator;
         _repository = repository;
     }
 
@@ -27,25 +31,16 @@ public class BlockCypherController : ControllerBase
     /// <param name="coin">The cryptocurrency coin (e.g., btc, eth, ltc, dash).</param>
     /// <returns>Latest block information in JSON format.</returns>
     [HttpGet("{coin}/main")]
-    public IActionResult GetCoin(string coin)
+    public async Task<IActionResult> GetCoin(string coin)
     {
-        if (IsValid(coin))
-            return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
-
         try
         {
-            using var http = new HttpClient();
+            var result = await _mediator.Send(new GetBlockCypherCommand(coin));
 
-            var response = http.GetAsync($"https://api.blockcypher.com/v1/{coin}/main").Result;
-            var result = response.Content.ReadAsStringAsync().Result;
+            if (!result.IsSuccess)
+                return StatusCode(result.StatusCode, result.Error);
 
-            if (!response.IsSuccessStatusCode)
-                return StatusCode((int)response.StatusCode, $"Error fetching data from BlockCypher API: {result}");
-
-            var record = BlockCypher.FromJson(coin, result);
-
-            _repository.Save(record);
-            return Ok(BlockcypherSnapshotDto.FromRecord(record));
+            return Ok(BlockcypherSnapshotDto.FromRecord(result.Value!));
         }
         catch (Exception ex)
         {
@@ -63,7 +58,7 @@ public class BlockCypherController : ControllerBase
     {
         try
         {
-            if (IsValid(coin))
+            if (!IsValid(coin))
                 return BadRequest($"Invalid coin: {coin}. Valid coins are: {string.Join(", ", Coins)}");
 
             if (!_repository.TryGetHistory(coin, out var history) || history.Count == 0)
@@ -79,5 +74,5 @@ public class BlockCypherController : ControllerBase
         }
     }
 
-    private static bool IsValid(string coin) => !Coins.Contains(coin);
+    private static bool IsValid(string coin) => Coins.Contains(coin);
 }
