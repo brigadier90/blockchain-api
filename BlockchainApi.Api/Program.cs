@@ -1,6 +1,5 @@
 using System.Reflection;
 using BlockchainApi.Api.Application.Clients;
-using BlockchainApi.Api.Domain;
 using BlockchainApi.Api.Domain.Repositories;
 using BlockchainApi.Api.Infrastructure.Clients;
 using BlockchainApi.Api.Infrastructure.Repositories;
