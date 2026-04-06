@@ -15,7 +15,7 @@ public class BlockCypherRepository : IBlockCypherRepository
         _storage[record.Coin].Add(record);
     }
 
-    public bool TryGetHistory(string coin, out List<BlockCypher> history)
+    public bool TryGetAllFor(string coin, out List<BlockCypher> history)
     {
         if (_storage.TryGetValue(coin, out var stored))
         {

@@ -5,7 +5,6 @@ public class BlockcypherSnapshotDto
 {
     public string Chain { get; set; } = null!;
     public DateTime CreatedAt { get; set; }
-
     public JsonElement Data { get; set; }
 
     public static BlockcypherSnapshotDto FromRecord(BlockCypher entity)

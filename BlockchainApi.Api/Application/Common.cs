@@ -1,5 +1,13 @@
 namespace BlockchainApi.Api.Application.Common;
 
+public class Constants
+{
+    public static readonly HashSet<string> ValidCoins = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "btc", "eth", "ltc", "dash"
+    };
+}
+
 public class Result<T>
 {
     public bool IsSuccess { get; init; }
