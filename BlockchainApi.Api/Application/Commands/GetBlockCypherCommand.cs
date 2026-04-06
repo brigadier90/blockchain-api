@@ -35,9 +35,9 @@ public class GetBlockCypherCommandHandler : IRequestHandler<GetBlockCypherComman
                 response.StatusCode);
 
         var record = BlockCypher.FromJson(request.Coin, response.Content);
-        var dto = BlockcypherSnapshotDto.FromRecord(record);
-
         _repository.Save(record);
+
+        var dto = BlockcypherSnapshotDto.FromRecord(record);
         return Result<BlockcypherSnapshotDto>.Success(dto);
     }
 }

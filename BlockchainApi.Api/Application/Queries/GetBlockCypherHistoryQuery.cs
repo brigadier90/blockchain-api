@@ -10,10 +10,6 @@ public record GetBlockCypherHistoryQuery(string Coin) : IRequest<Result<List<Blo
 public class GetBlockCypherHistoryQueryHandler : IRequestHandler<GetBlockCypherHistoryQuery, Result<List<BlockcypherSnapshotDto>>>
 {
     private IBlockCypherRepository _repository;
-    private static readonly HashSet<string> ValidCoins = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "btc", "eth", "ltc", "dash"
-    };
 
     public GetBlockCypherHistoryQueryHandler(IBlockCypherRepository repository)
     {
