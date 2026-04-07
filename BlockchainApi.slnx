@@ -1,4 +1,7 @@
 <Solution>
   <Project Path="BlockchainApi.Api/BlockchainApi.Api.csproj" />
   <Project Path="BlockchainApi.Tests/BlockchainApi.Tests.csproj" />
+  <Project Path="BlockchainApi.UnitTests/BlockchainApi.UnitTests.csproj" />
+  <Project Path="BlockchainApi.IntegrationTests/BlockchainApi.IntegrationTests.csproj" />
+  <Project Path="BlockchainApi.FunctionalTests/BlockchainApi.FunctionalTests.csproj" />
 </Solution>
