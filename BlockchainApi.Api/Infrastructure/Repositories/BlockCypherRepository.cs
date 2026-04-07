@@ -1,6 +1,6 @@
 using BlockchainApi.Api.Domain.Models;
 using BlockchainApi.Api.Domain.Repositories;
-using BlockchainApi.Api.Infrastructure.Data;
+using BlockchainApi.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlockchainApi.Api.Infrastructure.Repositories;

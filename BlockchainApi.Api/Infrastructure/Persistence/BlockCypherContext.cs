@@ -1,7 +1,7 @@
 using BlockchainApi.Api.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BlockchainApi.Api.Infrastructure.Data;
+namespace BlockchainApi.Api.Infrastructure.Persistence;
 
 public class BlockCypherContext : DbContext
 {

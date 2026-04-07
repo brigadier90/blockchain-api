@@ -2,7 +2,7 @@ using System.Reflection;
 using BlockchainApi.Api.Application.Clients;
 using BlockchainApi.Api.Domain.Repositories;
 using BlockchainApi.Api.Infrastructure.Clients;
-using BlockchainApi.Api.Infrastructure.Data;
+using BlockchainApi.Api.Infrastructure.Persistence;
 using BlockchainApi.Api.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
