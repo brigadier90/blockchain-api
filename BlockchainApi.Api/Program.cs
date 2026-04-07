@@ -2,7 +2,9 @@ using System.Reflection;
 using BlockchainApi.Api.Application.Clients;
 using BlockchainApi.Api.Domain.Repositories;
 using BlockchainApi.Api.Infrastructure.Clients;
+using BlockchainApi.Api.Infrastructure.Data;
 using BlockchainApi.Api.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,13 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowAnyHeader());
 });
-builder.Services.AddSingleton<IBlockCypherRepository, BlockCypherRepository>();
+
+builder.Services.AddDbContext<BlockCypherContext>(options =>
+{
+    options.UseSqlite("Data Source=blockcypher.db");
+});
+
+builder.Services.AddScoped<IBlockCypherRepository, BlockCypherRepository>();
 builder.Services.AddHttpClient<IBlockCypherClient, BlockCypherClient>()
     .ConfigureHttpClient(client =>
     {
