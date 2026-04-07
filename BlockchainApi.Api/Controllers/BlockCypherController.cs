@@ -45,13 +45,15 @@ public class BlockCypherController : ControllerBase
     /// Returns the history of block information requested for the specified coin.
     /// </summary> 
     /// <param name="coin">The cryptocurrency coin (e.g., btc, eth, ltc, dash).</param>
+    /// <param name="page">The page number to retrieve (1-based).</param>
+    /// <param name="pageSize">The number of snapshots per page.</param>
     /// <returns>List of historical block information in JSON format.</returns>
     [HttpGet("{coin}/history")]
-    public async Task<IActionResult> GetHistory(string coin)
+    public async Task<IActionResult> GetHistory(string coin, int page = 1, int pageSize = 20)
     {
-        _logger.LogInformation("Received request for history data for coin {Coin}", coin);
+        _logger.LogInformation("Received request for history data for coin {Coin} page {Page} pageSize {PageSize}", coin, page, pageSize);
 
-        var result = await _mediator.Send(new GetBlockCypherHistoryQuery(coin));
+        var result = await _mediator.Send(new GetBlockCypherHistoryQuery(coin, page, pageSize));
 
         if (!result.IsSuccess)
         {

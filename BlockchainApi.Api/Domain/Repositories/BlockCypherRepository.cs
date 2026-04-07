@@ -5,5 +5,5 @@ namespace BlockchainApi.Api.Domain.Repositories;
 public interface IBlockCypherRepository
 {
     public void Save(BlockCypher record);
-    public bool TryGetAllFor(string coin, out List<BlockCypher> history);
+    public List<BlockCypher> GetPageFor(string coin, int page, int pageSize);
 }

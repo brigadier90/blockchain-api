@@ -24,15 +24,15 @@ public class BlockCypherRepository : IBlockCypherRepository
         _context.SaveChanges();
     }
 
-    public bool TryGetAllFor(string coin, out List<BlockCypher> history)
+    public List<BlockCypher> GetPageFor(string coin, int page, int pageSize)
     {
-        _logger.LogInformation("Querying history for coin {Coin}", coin);
-        history = _context.BlockCyphers
+        _logger.LogInformation("Querying history for coin {Coin} page {Page} pageSize {PageSize}", coin, page, pageSize);
+        return _context.BlockCyphers
             .Where(x => x.Coin == coin)
             .OrderByDescending(x => x.CreatedAt)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .AsNoTracking()
             .ToList();
-
-        return history.Count > 0;
     }
 }
