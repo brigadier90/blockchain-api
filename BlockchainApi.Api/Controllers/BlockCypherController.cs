@@ -49,7 +49,7 @@ public class BlockCypherController : ControllerBase
     /// <param name="pageSize">The number of snapshots per page.</param>
     /// <returns>List of historical block information in JSON format.</returns>
     [HttpGet("{coin}/history")]
-    public async Task<IActionResult> GetHistory(string coin, int page = 1, int pageSize = 20)
+    public async Task<IActionResult> GetHistory(string coin, int? page = null, int? pageSize = null)
     {
         _logger.LogInformation("Received request for history data for coin {Coin} page {Page} pageSize {PageSize}", coin, page, pageSize);
 

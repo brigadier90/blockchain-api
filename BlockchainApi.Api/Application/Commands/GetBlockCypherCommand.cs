@@ -46,7 +46,7 @@ public class GetBlockCypherCommandHandler : IRequestHandler<GetBlockCypherComman
         }
 
         var record = BlockCypher.FromJson(request.Coin, response.Content);
-        _repository.Save(record);
+        await _repository.SaveAsync(record);
         _logger.LogInformation("Saved block data for coin {Coin} at {CreatedAt}", request.Coin, record.CreatedAt);
 
         var dto = BlockcypherSnapshotDto.FromRecord(record);

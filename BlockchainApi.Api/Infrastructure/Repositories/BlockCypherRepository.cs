@@ -2,6 +2,7 @@ using BlockchainApi.Api.Domain.Models;
 using BlockchainApi.Api.Domain.Repositories;
 using BlockchainApi.Api.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BlockchainApi.Api.Infrastructure.Repositories;
 
@@ -16,22 +17,30 @@ public class BlockCypherRepository : IBlockCypherRepository
         _logger = logger;
     }
 
-    public void Save(BlockCypher record)
+    public async Task SaveAsync(BlockCypher record)
     {
         _logger.LogInformation("Saving block record for coin {Coin} at {CreatedAt}", record.Coin, record.CreatedAt);
         _context.BlockCyphers.Add(record);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
+        _logger.LogInformation("Block record persisted for coin {Coin} with ID {Id}", record.Coin, record.Id);
     }
 
-    public List<BlockCypher> GetPageFor(string coin, int page, int pageSize)
+    public async Task<List<BlockCypher>> GetAllAsync(string coin, int? page = null, int? pageSize = null)
     {
         _logger.LogInformation("Querying history for coin {Coin} page {Page} pageSize {PageSize}", coin, page, pageSize);
-        return _context.BlockCyphers
+
+        var query = _context.BlockCyphers
             .Where(x => x.Coin == coin)
             .OrderByDescending(x => x.CreatedAt)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .AsNoTracking()
-            .ToList();
+            .AsNoTracking();
+
+        if (page.HasValue && pageSize.HasValue)
+        {
+            query = query
+                .Skip((page.Value - 1) * pageSize.Value)
+                .Take(pageSize.Value);
+        }
+
+        return await query.ToListAsync();
     }
 }
