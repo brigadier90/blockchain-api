@@ -50,7 +50,7 @@ GET /health
 - **CQRS Pattern** - Separate command (write) and query (read) handlers for scalability
 - **MediatR** - Command/query dispatch with structured logging
 - **Repository Pattern** - Data access abstraction with async methods
-- **SQLite + EF Core** - Local persistence with migration support
+- **SQLite + EF Core** - Local persistence with auto schema creation at startup
 
 **Scaling Features:**
 - **Pagination** - Database-level Skip/Take for large result sets
@@ -87,4 +87,4 @@ Watch mode:
 dotnet watch run --project BlockchainApi.Api
 ```
 
-Swagger UI: Available at `/swagger`
+Swagger UI: `http://127.0.0.1:5284/swagger/index.html`
